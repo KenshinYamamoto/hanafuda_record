@@ -8,21 +8,10 @@ class MonthDatabase {
   ) async {
     await database.execute('''
   CREATE TABLE $month(
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  gokou INTEGER,
-  amesikou INTEGER,
-  sikou INTEGER,
-  sankou INTEGER,
-  ino INTEGER,
-  akaao INTEGER,
-  aka INTEGER,
-  ao INTEGER,
-  tukimi INTEGER,
-  hanami INTEGER,
-  tane INTEGER,
-  tan INTEGER,
-  kasu INTEGER,
-  createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    winner TEXT,
+    yaku TEXT,
+    point INTEGER,
   )
   ''');
   }
@@ -40,36 +29,16 @@ class MonthDatabase {
   // create new item
   static Future<int> createItem({
     required String month,
-    required int gokou,
-    required int amesikou,
-    required int sikou,
-    required int sankou,
-    required int ino,
-    required int akaao,
-    required int aka,
-    required int ao,
-    required int tukimi,
-    required int hanami,
-    required int tane,
-    required int tan,
-    required int kasu,
+    required String winner,
+    required String yaku,
+    required int point,
   }) async {
     final db = await MonthDatabase.monthDb(month);
 
     final data = {
-      'gokou': gokou,
-      'amesikou': amesikou,
-      'sikou': sikou,
-      'sankou': sankou,
-      'ino': ino,
-      'akaao': akaao,
-      'aka': aka,
-      'ao': ao,
-      'tukimi': tukimi,
-      'hanami': hanami,
-      'tane': tane,
-      'tan': tan,
-      'kasu': kasu,
+      'winner': winner,
+      'yaku': yaku,
+      'point': point,
     };
     final id = await db.insert(
       month, // テーブル名
@@ -106,37 +75,16 @@ class MonthDatabase {
   static Future<int> updateMemberItem({
     required int id,
     required String month,
-    required int gokou,
-    required int amesikou,
-    required int sikou,
-    required int sankou,
-    required int ino,
-    required int akaao,
-    required int aka,
-    required int ao,
-    required int tukimi,
-    required int hanami,
-    required int tane,
-    required int tan,
-    required int kasu,
+    required String winner,
+    required String yaku,
+    required int point,
   }) async {
     final db = await MonthDatabase.monthDb(month);
 
     final data = {
-      'gokou': gokou,
-      'amesikou': amesikou,
-      'sikou': sikou,
-      'sankou': sankou,
-      'ino': ino,
-      'akaao': akaao,
-      'aka': aka,
-      'ao': ao,
-      'tukimi': tukimi,
-      'hanami': hanami,
-      'tane': tane,
-      'tan': tan,
-      'kasu': kasu,
-      'createAt': DateTime.now().toString(),
+      'winner': winner,
+      'yaku': yaku,
+      'point': point,
     };
 
     final result = await db.update(

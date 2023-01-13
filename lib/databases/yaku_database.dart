@@ -5,19 +5,9 @@ class YakuDatabase {
   static Future<void> createYakuTables(sql.Database database) async {
     await database.execute('''
   CREATE TABLE yaku(
-  gokou INTEGER,
-  amesikou INTEGER,
-  sikou INTEGER,
-  sankou INTEGER,
-  ino INTEGER,
-  akaao INTEGER,
-  aka INTEGER,
-  ao INTEGER,
-  tukimi INTEGER,
-  hanami INTEGER,
-  tane INTEGER,
-  tan INTEGER,
-  kasu INTEGER,
+    id INTEGER,
+    yaku TEXT,
+    point INTEGER,
   )
   ''');
   }
@@ -40,36 +30,16 @@ class YakuDatabase {
 
   // Update an item by id
   static Future<int> updateMemberItem({
-    required int gokou,
-    required int amesikou,
-    required int sikou,
-    required int sankou,
-    required int ino,
-    required int akaao,
-    required int aka,
-    required int ao,
-    required int tukimi,
-    required int hanami,
-    required int tane,
-    required int tan,
-    required int kasu,
+    required int id,
+    required String yaku,
+    required int point,
   }) async {
     final db = await YakuDatabase.yakuDb();
 
     final data = {
-      'gokou': gokou,
-      'amesikou': amesikou,
-      'sikou': sikou,
-      'sankou': sankou,
-      'ino': ino,
-      'akaao': akaao,
-      'aka': aka,
-      'ao': ao,
-      'tukimi': tukimi,
-      'hanami': hanami,
-      'tane': tane,
-      'tan': tan,
-      'kasu': kasu,
+      'id': id,
+      'yaku': yaku,
+      'point': point,
     };
 
     final result = await db.update(

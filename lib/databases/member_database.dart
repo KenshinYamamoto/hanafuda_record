@@ -5,16 +5,16 @@ class MemberDatabase {
   static Future<void> createMemberTables(sql.Database database) async {
     await database.execute('''
   CREATE TABLE members(
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  one TEXT NOT NULL,
-  two TEXT NOT NULL,
-  three TEXT,
-  four TEXT,
-  oneTotal INTEGER NOT NULL,
-  twoTotal INTEGER NOT NULL,
-  threeTotal INTEGER,
-  fourTotal INTEGER,
-  createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    one TEXT NOT NULL,
+    two TEXT NOT NULL,
+    three TEXT,
+    four TEXT,
+    oneTotal INTEGER NOT NULL,
+    twoTotal INTEGER NOT NULL,
+    threeTotal INTEGER,
+    fourTotal INTEGER,
+    createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )
   ''');
   }
