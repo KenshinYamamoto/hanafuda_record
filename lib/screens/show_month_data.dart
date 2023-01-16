@@ -82,7 +82,9 @@ class _ShowMonthDataState extends State<ShowMonthData> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       title: Text(
-                        '${_monthWinnerDatas[0][_initMonth[i]]}が${_monthPointDatas[0][_initMonth[i]]}点取得',
+                        _monthPointDatas[0][_initMonth[i]] == 0
+                            ? '流れ'
+                            : '${_monthWinnerDatas[0][_initMonth[i]]}が${_monthPointDatas[0][_initMonth[i]]}点取得',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
