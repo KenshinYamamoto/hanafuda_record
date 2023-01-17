@@ -45,7 +45,7 @@ class _AddDatasState extends State<AddDatas> {
         }
       }
 
-      Platform.isAndroid
+      Platform.isIOS
           ? showCupertinoModalPopup(
               context: context,
               builder: (context) => CupertinoAlertDialog(
