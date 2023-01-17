@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../databases/member_record_database.dart';
@@ -26,12 +27,13 @@ class _AddDatasState extends State<AddDatas> {
   late List<int> monthPoints = List.filled(12, 0);
   late List<int> totalPoints = List.filled(newMemberLists.length, 0);
 
-  void submitDatabase(BuildContext context) async {
+  void showSubmitDialog(BuildContext context) {
     final bool isValid = _formKey.currentState!.validate();
 
     if (isValid) {
       FocusScope.of(context).unfocus();
       _formKey.currentState!.save();
+      totalPoints = List.filled(newMemberLists.length, 0);
 
       for (int i = 0; i < newMemberLists.length; i++) {
         for (int j = 0; j < monthPoints.length; j++) {
@@ -43,16 +45,109 @@ class _AddDatasState extends State<AddDatas> {
         }
       }
 
-      await _addMemberRecord();
-      await _addWinnerData();
-      await _addPointData();
-
-      if (!mounted) return;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/',
-        (route) => false,
-      );
+      Platform.isAndroid
+          ? showCupertinoModalPopup(
+              context: context,
+              builder: (context) => CupertinoAlertDialog(
+                title: const Text(
+                  '以下の内容で送信します',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        '▼点数',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      for (int i = 0; i < monthPoints.length; i++) ...{
+                        Text(
+                            '${i + 1}月: ${dropdownValues[i]}が${monthPoints[i]}点取得'),
+                      },
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        '▼合計点',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      for (int i = 0; i < newMemberLists.length; i++) ...{
+                        Text('${newMemberLists[i]}が合計${totalPoints[i]}点取得')
+                      }
+                    ],
+                  ),
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    isDefaultAction: true,
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('No'),
+                  ),
+                  CupertinoDialogAction(
+                    isDestructiveAction: true,
+                    onPressed: () => submitDatabase(context),
+                    child: const Text('Yes'),
+                  ),
+                ],
+              ),
+            )
+          : showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text(
+                  '以下の内容で送信します',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        '▼点数',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      for (int i = 0; i < monthPoints.length; i++) ...{
+                        Text(monthPoints[i] == 0
+                            ? '${i + 1}月: 流れ'
+                            : '${i + 1}月: ${dropdownValues[i]}が${monthPoints[i]}点取得'),
+                      },
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        '▼合計点',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      for (int i = 0; i < newMemberLists.length; i++) ...{
+                        Text('${newMemberLists[i]}が合計${totalPoints[i]}点取得')
+                      }
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () => submitDatabase(context),
+                    child: const Text('Yes'),
+                  ),
+                ],
+              ),
+            );
     }
+  }
+
+  void submitDatabase(BuildContext context) async {
+    await _addMemberRecord();
+    await _addWinnerData();
+    await _addPointData();
+
+    if (!mounted) return;
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/',
+      (route) => false,
+    );
   }
 
   // itemを追加する
@@ -212,7 +307,8 @@ class _AddDatasState extends State<AddDatas> {
                   width: deviceWidth * 0.2,
                   child: ElevatedButton(
                     onPressed: () {
-                      submitDatabase(context);
+                      // submitDatabase(context);
+                      showSubmitDialog(context);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
